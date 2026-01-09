@@ -1,0 +1,115 @@
+# 1. Получить только базовую информацию о клиенте
+query GetClientBasicInfo {
+  client(id: "123") {
+    id
+    name
+    age
+  }
+}
+
+# 2. Клиент с документами (заменяет 2 REST вызова)
+query GetClientWithDocuments {
+  client(id: "123") {
+    id
+    name
+    age
+    documents {
+      id
+      type
+      number
+      issueDate
+      expiryDate
+    }
+  }
+}
+
+# 3. Полная информация о клиенте (заменяет 3 REST вызова)
+query GetClientFullInfo {
+  client(id: "123") {
+    id
+    name
+    age
+    documents {
+      id
+      type
+      number
+      issueDate
+      expiryDate
+    }
+    relatives {
+      id
+      name
+      relationType
+      age
+    }
+  }
+}
+
+# 4. Клиент с фильтрацией документов - только паспорта
+query GetClientWithPassports {
+  client(id: "123") {
+    id
+    name
+    documents(type: "passport") {
+      type
+      number
+      issueDate
+    }
+  }
+}
+
+# 5. Список клиентов с пагинацией
+query GetClientsList {
+  clients(limit: 10, offset: 0) {
+    nodes {
+      id
+      name
+      age
+    }
+    totalCount
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}
+
+# 6. Поиск клиентов по имени
+query SearchClientsByName {
+  clients(name: "Иванов", limit: 5) {
+    nodes {
+      id
+      name
+      age
+    }
+    totalCount
+  }
+}
+
+# 7. Фильтрация клиентов по возрасту
+query GetClientsByAge {
+  clients(minAge: 18, maxAge: 65, limit: 20) {
+    nodes {
+      id
+      name
+      age
+    }
+    totalCount
+  }
+}
+
+# 8. Получить документ с информацией о владельце
+query GetDocumentWithClient {
+  document(id: "456") {
+    id
+    type
+    number
+    issueDate
+    expiryDate
+    client {
+      id
+      name
+      age
+    }
+  }
+}
